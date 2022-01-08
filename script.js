@@ -2,13 +2,22 @@ function getDayAndTime() {
     var date = moment().format("dddd MMMM Do");
     $("#currentDay").text(date);
     changeHour();
+    getProjects();
 }   
 
 setInterval(getDayAndTime, 1000);
 
 function getProjects() {
-    var storedProjects = JSON.parse(localStorage.getItem(""))
+    var currentProjects = JSON.parse(localStorage.getItem("currentProjects"));
+    if (currentProjects === null) {
+        return {};
+    }
+    return currentProjects
 }
+
+// function renderProjects() {
+
+// }
 
 function checkPastPresentFuture(i, textarea) {
     var $textarea = $(textarea);
@@ -31,7 +40,16 @@ function saveProject(event) {
     var $clickedButton = $(event.target);
     var buttonID = $clickedButton.data("id");
     var savedProject = $clickedButton.prev().val();
-    // var currentProjects = {
+    console.log(buttonID);
+    console.log(savedProject);
+    currentProjects = getProjects();
+    currentProjects[buttonID] = savedProject;
+    localStorage.setItem("currentProjects", JSON.stringify(currentProjects));
+}
+
+$(".saveBtn").on("click", saveProject);
+
+ // var currentProjects = {
     //     8: project8, 
     //     9: project9,
     //     10: project10,
@@ -43,9 +61,3 @@ function saveProject(event) {
     //     16: project16, 
     //     17: project17,
     // };
-    console.log(buttonID);
-    console.log(savedProject);
-    
-}
-
-$(".saveBtn").on("click", saveProject);
